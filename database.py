@@ -1,3 +1,3 @@
-file = open('holiday.txt',  encoding='UTF-8')
-for line in file:
-    print(line)
+with open('text.txt', 'r') as file:
+    read_file = file.read()
+print(read_file)
