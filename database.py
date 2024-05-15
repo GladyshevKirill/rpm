@@ -1,15 +1,9 @@
 a = int(input('Введите день от 1 до 31: '))
 b = int(input('Введите месяц от 1 до 12 : '))
-if b == 1 or b == 2 or b == 12:
-    print ('Зима')
-elif b == 3 or b == 4 or b == 5:
-    print ('Весна')
-elif b == 6 or b == 7 or b == 8:
-    print ('Лето')
-elif b == 9 or b == 10 or b == 11:
-    print ('Осень')
-else :
+if b > 12:
     print ('Ошибка! В году 12 месяцев!!!')
+else: 
+    pass
 if (b == 4 or b == 6 or b == 9 or b == 11) and a> 30:
     print ('Ошибка! В месяце 30 дней')
 elif (b == 2) and a > 28:
