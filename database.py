@@ -20,7 +20,7 @@ elif (a<=0):
     print ('Ошибка! Неверное число')
 else:
     m1 = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
-    C = m1[b-1] + a  # номер дня в году с 1
+    C = m1[b-1] + a
 
 list_ = []
 with open('holiday.txt', 'r', encoding='UTF-8') as file:
