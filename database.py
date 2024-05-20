@@ -1,24 +1,21 @@
-import peewee
+import sqlite3
 
-# Определение модели данных
-db = peewee.SqliteDatabase('database.db')
+# Подключение к базе данных (или создание новой, если она не существует)
+conn = sqlite3.connect('my_database.db')
 
-class EventModel(peewee.Model):
-    date = peewee.DateField()
-    event = peewee.CharField()
+# Создание курсора для работы с базой данных
+cursor = conn.cursor()
 
-    class Meta:
-        database = db
+# Создание таблицы с тремя колонками: id, name, age
+cursor.execute('''CREATE TABLE IF NOT EXISTS день
+                (id TEXT,
+                name TEXT NOT NULL,
+                age TEXT)''')
 
-# Создание таблицы в базе данных
-db.connect()
-db.create_tables([EventModel])
+# Сохранение изменений в базе данных
+conn.commit()
 
-# Заполнение таблицы данными из файла
-with open('holiday.txt', 'r') as file:
-    lines = file.readlines()
-    for line in lines:
-        date, event = line.strip().split('-')
-        EventModel.create(date=date, event=event)
+# Закрытие соединения с базой данных
+conn.close()
 
-db.close()
+print("База данных с тремя колонками успешно создана.")
