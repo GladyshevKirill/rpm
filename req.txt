@@ -1,5 +1,4 @@
 requests
-aiogram
 bs4
-BeautifulSoup
 lxml
+peewee
