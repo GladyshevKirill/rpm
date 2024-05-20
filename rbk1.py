@@ -10,6 +10,9 @@ main = bs.find_all('main', 'main-content-100')
 site = main[0].text
 site = site[site.find('Список'):]
 site = site[:site.find('Поделиться')]
+with open('rbk.txt', 'w', encoding='utf-8') as file:
+    file.write(site)
 print(site)
+
 
 
