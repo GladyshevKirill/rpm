@@ -29,8 +29,12 @@ b_s = site.rfind('Дни рождения российских и зарубеж
 demos_s = site[d_s:b_s]
 
 b_s = site.find('Дни рождения российских и зарубежных знаменитостей')
+h_s = site.rfind('Памятные даты в истории')
+birthday_s = site[b_s:h_s]
+
+h_s = site.find('Памятные даты в истории')
 i_s = site.rfind('Кто сегодня отмечает именины')
-birthday_s = site[b_s:i_s]
+history_s = site[h_s:i_s]
 
 i_s = site.find('Кто сегодня отмечает именины')
 imenins_s = site[i_s:]
