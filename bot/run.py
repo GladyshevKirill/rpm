@@ -4,6 +4,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
 from rbk1 import site
+import menu as m
 
 
 bot = Bot(token='7086038652:AAEKbcrL_Mod-9KNUf2jZGNBE_ZYj7ti0jg') #завершить - ctrl + C
@@ -13,12 +14,7 @@ dp = Dispatcher()
 async def cmd_start(message: Message):
 
     await message.answer(
-        'Привет!'
-
-'Я бот, который сообщит тебе, какой сегодня праздник!'
-
-'Давай знакомиться =) Что желаешь узнать?'
-    )
+        'Привет! Я бот, который сообщит тебе, какой сегодня праздник! Давай знакомиться =) Что желаешь узнать?', reply_markup= m.mainMenu)
 
 @dp.message(Command('help'))
 async def cmd_help(message: Message):

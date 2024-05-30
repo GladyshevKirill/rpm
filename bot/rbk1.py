@@ -15,8 +15,4 @@ site = site.replace('Праздники сегодня', '')
 word_s = 'Международные праздники'
 rus_s = 'Праздники в России'
 
-for i in site:
-    if i == word_s:
-        print(i)
-    elif i == rus_s:
-        break
+print(site)
