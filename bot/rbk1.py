@@ -12,7 +12,8 @@ site = site[site.rfind('Список'):]
 site = site[:site.rfind('ПоделитьсяАвторыТеги')]
 site = site.replace('Праздники сегодня', '')
 
-word_s = 'Международные праздники'
-rus_s = 'Праздники в России'
+word_s = site.find('Международные праздники')
+rus_s = site.rfind('Праздники в России')
+print(site[word_s:rus_s])
 
-print(site)
+#print(site)
