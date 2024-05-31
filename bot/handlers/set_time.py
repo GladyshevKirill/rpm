@@ -38,22 +38,7 @@ async def set_time_by_notification_handler(message: Message, state: FSMContext):
 
     await state.clear()
     
-
-    inline_markup = InlineKeyboardMarkup(inline_keyboard=[
-        [
-            InlineKeyboardButton(text='🌍 Международные праздники', callback_data='11'),
-            InlineKeyboardButton(text='🇷🇺 Праздники в России',callback_data='22')
-        ],
-        [
-            InlineKeyboardButton(text='☦️ Церковные праздники',callback_data='33'),
-            InlineKeyboardButton(text='🎂 Дни рождения знаменитостей',callback_data='44')
-        ],
-        [
-            InlineKeyboardButton(text='🪶Памятные даты в истории',callback_data='55'),
-            InlineKeyboardButton(text='🎁 Кто сегодня отмечает именины',callback_data='6')
-        ]
-    ])
-    await message.answer("Время успешно записано!\n\nТеперь выберите категории, которые вас интересуют", reply_markup=inline_markup)
+    await message.answer("Время успешно записано!\n\nТеперь выберите категории, которые вас интересуют")
 
 @router.message(SetTime.time)
 async def set_other_by_notification_handler(message: Message):
