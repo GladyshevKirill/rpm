@@ -6,10 +6,9 @@ from aiogram.filters import Command
 from aiogram.types import Message, BotCommand, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from bot.rbk1 import *
 
-from handlers import include_routers
-from models import User
-from singleton import GlobalVars
-from models import User
+from bot.handlers import include_routers
+from bot.models import User
+from bot.singleton import GlobalVars
 from datetime import time, timedelta, datetime
 
 

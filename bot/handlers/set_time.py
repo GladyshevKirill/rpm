@@ -4,7 +4,7 @@ from datetime import time
 
 from aiogram import Router, F
 from aiogram.filters import Command
-from aiogram.types import Message
+from aiogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.fsm.context import FSMContext
 
 from bot.states.set_time import SetTime
@@ -18,7 +18,7 @@ TIME_PATTERN = r'^([0-9]|1[0-9]|2[0-3]):([0-5]\d)$'
 async def set_time_handler(message: Message, state: FSMContext):
     """Обработка команды set_time"""
     await state.set_state(SetTime.time)
-    await message.answer("Выберите время в формате чч:мм для рассылки картинок")
+    await message.answer("Выберите время в формате чч:мм для рассылки праздников")
 
 
 @router.message(F.text, SetTime.time)
@@ -37,9 +37,25 @@ async def set_time_by_notification_handler(message: Message, state: FSMContext):
     GlobalVars.SEND_TIME = new_time
 
     await state.clear()
-    await message.answer("Время успешно записано")
+    
+
+    inline_markup = InlineKeyboardMarkup(inline_keyboard=[
+        [
+            InlineKeyboardButton(text='🌍 Международные праздники', callback_data='11'),
+            InlineKeyboardButton(text='🇷🇺 Праздники в России',callback_data='22')
+        ],
+        [
+            InlineKeyboardButton(text='☦️ Церковные праздники',callback_data='33'),
+            InlineKeyboardButton(text='🎂 Дни рождения знаменитостей',callback_data='44')
+        ],
+        [
+            InlineKeyboardButton(text='🪶Памятные даты в истории',callback_data='55'),
+            InlineKeyboardButton(text='🎁 Кто сегодня отмечает именины',callback_data='6')
+        ]
+    ])
+    await message.answer("Время успешно записано!\n\nТеперь выберите категории, которые вас интересуют", reply_markup=inline_markup)
 
 @router.message(SetTime.time)
 async def set_other_by_notification_handler(message: Message):
     """Срабатывает когда пользователь отправляет не текст со временем"""
-    await message.answer("Выберите время в формате чч:мм для рассылки картинок")
+    await message.answer("Выберите время в формате чч:мм для рассылки праздников")
