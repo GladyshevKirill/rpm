@@ -1,5 +1,6 @@
 import asyncio
 
+from config import TOKEN
 from aiogram import Bot, Dispatcher, F, Router
 from aiogram.filters import Command
 from aiogram.types import Message, BotCommand, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
@@ -7,7 +8,7 @@ from rbk1 import *
 
 
 
-bot = Bot(token='7086038652:AAEKbcrL_Mod-9KNUf2jZGNBE_ZYj7ti0jg') #завершить - ctrl + C
+bot = Bot(token=TOKEN) #завершить - ctrl + C
 dp = Dispatcher()
 router = Router()
 
@@ -118,6 +119,15 @@ async def cmd_set_time(message: Message):
         [InlineKeyboardButton(text='Назад', callback_data='back')]
     ])
     await message.answer('Введите время в формате ЧЧ:ММ:', reply_markup=kb_back)
+
+@router.message(Command("set_time"))
+async def set_time_handler(message: Message):
+    kb_back = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='Назад', callback_data='back')]
+    ])
+    await state.set_state(SetTime.time)
+    await message.answer("Выберите время в формате чч:мм для рассылки картинок")
+
 
 async def main():
     await dp.start_polling(bot)
