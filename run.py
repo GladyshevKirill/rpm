@@ -4,7 +4,13 @@ from config import TOKEN
 from aiogram import Bot, Dispatcher, F, Router
 from aiogram.filters import Command
 from aiogram.types import Message, BotCommand, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
-from rbk1 import *
+from bot.rbk1 import *
+
+from handlers import include_routers
+from models import User
+from singleton import GlobalVars
+from models import User
+from datetime import time, timedelta, datetime
 
 
 
@@ -15,7 +21,7 @@ router = Router()
 
 
 @dp.message(Command("start"))
-async def start_handler(msg: Message):
+async def start_handler(message: Message):
     hello = 'Привет! Я бот, который сообщит тебе, какой сегодня праздник! Давай знакомиться =)\n\n Введи /set_time, чтобы получать праздники каждый день)\n\n Что желаешь узнать?'
     await bot.set_my_commands([
         BotCommand(command='start', description='Запуск/перезапуск бота'),
@@ -37,7 +43,7 @@ async def start_handler(msg: Message):
             InlineKeyboardButton(text='🎁 Кто сегодня отмечает именины',callback_data='6')
         ]
     ])
-    await msg.answer(text=hello, reply_markup=inline_markup)
+    await message.answer(text=hello, reply_markup=inline_markup)
 
 @dp.callback_query(F.data == '1')
 async def callback_query_handler(callback_query:CallbackQuery):
@@ -113,23 +119,43 @@ async def cmd_help(message: Message):
 async def cmd_today(message: Message):
     await message.answer(site) 
 
-@dp.message(Command('set_time'))
-async def cmd_set_time(message: Message):
-    kb_back = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text='Назад', callback_data='back')]
-    ])
-    await message.answer('Введите время в формате ЧЧ:ММ:', reply_markup=kb_back)
+async def get_time_notify():
+    """Получить время ближайшего уведомления"""
+    now = datetime.now()
+    users = User.filter(User.time > now).order_by(User.time.asc())
+    if users.count() > 0:
+        return (users.first()).time
 
-@router.message(Command("set_time"))
-async def set_time_handler(message: Message):
-    kb_back = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text='Назад', callback_data='back')]
-    ])
-    await state.set_state(SetTime.time)
-    await message.answer("Выберите время в формате чч:мм для рассылки картинок")
+async def sending_messages():
+    """Рассылка сообщений"""
 
+    GlobalVars.SEND_TIME = await get_time_notify()
+    while True:
+        now_time = datetime.now().time()
+        now_time = time(now_time.hour, now_time.minute)
+        if GlobalVars.SEND_TIME and GlobalVars.SEND_TIME == now_time:
+            # рассылка уведомлений всем пользователям
+            for user in User.filter(time=GlobalVars.SEND_TIME):
+                await bot.send_message(
+                    chat_id=user.tg_user,
+                    text='Ваше уведомление',
+                )
+
+            GlobalVars.SEND_TIME = await get_time_notify()
+
+        now_time = (datetime.now() + timedelta(minutes=1))
+        now_time = datetime(now_time.year, now_time.month, now_time.day,
+                            now_time.hour, now_time.minute)
+        seconds = (now_time - datetime.now()).seconds + 1
+        await asyncio.sleep(seconds)
+
+async def on_startup():
+    """Обертка что бы запустить параллельный процесс"""
+    asyncio.create_task(sending_messages())
 
 async def main():
+    dp.startup.register(on_startup)
+    include_routers(dp)
     await dp.start_polling(bot)
 
 

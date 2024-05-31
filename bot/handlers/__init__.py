@@ -1,3 +1,4 @@
+"""Модуль для импорта роутеров"""
 from aiogram import Dispatcher
 from . import start, set_time
 

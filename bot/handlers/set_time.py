@@ -1,3 +1,4 @@
+"""Модуль обработки команды set_time"""
 import re
 from datetime import time
 
